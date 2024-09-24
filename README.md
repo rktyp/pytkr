@@ -1,1 +1,3 @@
 # pytkr
+
+init readme
