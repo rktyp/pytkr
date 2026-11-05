@@ -1,0 +1,66 @@
+gh API forwarder test report
+November 5, 2026
+
+The test agent finished. The forwarder is present in that VM, but it is not engaged, so the GitHub proof steps never ran.
+
+Prerequisites
+=============
+
+1. Environment: pass.
+   Paged GET /v1/environments (one page, no further cursor). The environment with the most github.com repos is repo-scale-1000-2f59 (d280a4af-d932-11f1-ba91-f63b1661ac50), with 1000 repos, all under rktyp.
+
+2. GitHub App: could not check.
+   GET /user/installations with GITHUB_TEST_TOKEN returned 403 "Resource not accessible by personal access token". No installation was changed. Continued to the build check, as specified.
+
+3. Build: pass.
+   Did not start a build. builds/active returned type=build, buildId=bld-20261105-2eac3ee5-1b57-49e6-8a2f-2cb09895d22a. That build is SUCCEEDED, createdAt November 5, 2026, 12:40 PM ET (2026-11-05T17:40:29.334Z, after 2026-11-05T07:26:00Z), with 1000 repoCommits and no missing or extra github.com repos.
+
+4. Inside the VM: fail.
+   From the test report: the exec-daemon has the forwarder and the on-demand flag, sandbox flags are absent, git has two github.com tokens, gh's stored login is one of them, and every repo maps to a token. The forwarder is not engaged (http_unix_socket empty; the Unix connect failed). These keys cannot fix that.
+
+Test agent
+==========
+
+The first POST /v1/agents returned 429 resource_exhausted (GitHub rate limit on getScopedInstallationAccessKey, retry after 60 seconds). No agent id. One retry after that wait returned 201.
+
+id: bc-00232eca-9884-410c-bcad-73db8d88aa25
+URL: https://cursor.com/agents/bc-00232eca-9884-410c-bcad-73db8d88aa25
+run: run-d331a2c1-dbf3-44e2-9874-2291352d8c82
+final status: FINISHED
+error: null
+
+The run's result is the report below (conversation fallback was not needed). Its repo count is 1000, which matches the environment.
+
+Test report
+===========
+
+The forwarder is not engaged. Step 1 failed the socket check, so Step 2 was mapping only and Steps 2–3 made no control or label calls.
+
+Step 1
+- GH_TOKEN, GITHUB_TOKEN, GH_HOST, GH_CONFIG_DIR, XDG_CONFIG_HOME: all unset
+- exec-daemon sha: c87ee615375d10364f4c02888fb18e55b4a37447
+- counts: 1, 1, 0 (forwarder present, on-demand flag present, sandbox flags absent)
+- http_unix_socket: empty (no path under ~/.cursor-gh-api-forwarder/)
+- directory mode: 700
+- daemon records: 1 (that record is 0 bytes; the Unix connect failed with OSError: [Errno 22] Invalid argument)
+
+Pass/fail
+- Step 1: fail — forwarder not engaged
+- Step 2: pass for mapping and login identity; control skipped because the socket check failed
+- Step 3: not run
+
+Step 2
+- 1000 repos, 2 tokens
+- 163a8918 (host-wide): 500 repos
+- cdb7c78d: 500 repos
+- none: 0
+- gh stored login token: 163a8918 (one of the two tokens)
+- git remote get-url returns the insteadOf URL with userinfo injected, so those strings are not prefixes of the plain URLs. Stripping that userinfo matched remote.origin.url for all 1000 repos; the longest plain-URL prefix produced the counts above.
+
+Control and label status codes
+- none (not run)
+
+Failures
+- gh config get http_unix_socket printed an empty value, not a socket path
+- socket.socket(AF_UNIX).connect on that empty value: OSError: [Errno 22] Invalid argument
+- No repo or gh command failed in Steps 2–3; those calls were not made
