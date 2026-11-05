@@ -1,0 +1,329 @@
+gh API forwarder test report (ten agents, two environment sizes)
+November 5, 2026
+
+All ten runs finished FINISHED with no error. Every report's repo count matches its environment: 502 on the small group and 1000 on the large group. The forwarder was on at the first check in every run (0 minutes), and no exec-daemon restarted during a test.
+
+Prerequisites
+=============
+
+1. Environments: pass.
+   Paged GET /v1/environments (one page, no further cursor). Nothing above 500 was missing, and no existing environment was changed.
+   Small group: repo-scale-502 (80dcc207-d94c-11f1-ba91-f63b1661ac50), 502 repos. That is the fewest above 500 and not above 600, so it was not created for this test.
+   Large group: repo-scale-1000-2f59 (d280a4af-d932-11f1-ba91-f63b1661ac50), 1000 repos. Four environments were tied at 1000 (bc1000, cc1000-a, cc1000-b, repo-scale-1000-2f59); this one was used. It was not created for this test.
+
+2. Build: pass for both. Neither build was started in this round.
+   Small: bld-20261105-9edea67e-0455-4b9d-b6d4-ab379fdabe6b
+   createdAt: November 5, 2026, 2:26 PM ET (2026-11-05T19:26:45.736Z)
+   status SUCCEEDED, 502 repoCommits, none missing.
+   That build was started in the earlier 502-repo run.
+   Large: the first builds/active call returned HTTP 502. The retry returned
+   bld-20261105-2eac3ee5-1b57-49e6-8a2f-2cb09895d22a
+   createdAt: November 5, 2026, 12:40 PM ET (2026-11-05T17:40:29.334Z)
+   status SUCCEEDED, 1000 repoCommits, none missing.
+
+3. Inside the VM: pass on all ten reports.
+   The forwarder and its flag are present, sandbox flags are absent, git has two github.com tokens, gh's stored login is one of them, every repo maps to a token, and the forwarder was engaged at the first check.
+
+Test agents
+===========
+
+All 10 POST /v1/agents calls returned 201. None were refused, cancelled, or retried. Starts were about 5 seconds apart; the calls themselves took longer, so the first-to-last start was about 3.5 minutes (3:37 PM to about 3:41 PM ET). All runs were FINISHED by 3:53 PM ET (2026-11-05T20:53:06Z).
+
+Odd numbers used the 502-repo environment. Even numbers used the 1000-repo environment.
+
+1. bc-49cab3c8-79e8-439f-8b59-98f899a5967b
+   URL: https://cursor.com/agents/bc-49cab3c8-79e8-439f-8b59-98f899a5967b
+   run: run-1351b670-e339-42fa-8b01-10a18e229cfd
+   repos: 502
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: yes / no
+   steps: pass, pass, pass
+   failures: none
+
+2. bc-15dfc33d-8421-46b5-95a2-33bf99657f55
+   URL: https://cursor.com/agents/bc-15dfc33d-8421-46b5-95a2-33bf99657f55
+   run: run-bcbd663c-9dd0-4345-980f-2b4d4b7bab8a
+   repos: 1000
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: no / no
+   steps: pass, pass, pass
+   failures: none
+
+3. bc-f4546f82-f21f-4e34-85f7-cb503195bb81
+   URL: https://cursor.com/agents/bc-f4546f82-f21f-4e34-85f7-cb503195bb81
+   run: run-014facfc-8be8-4117-abb6-17d7373b4b6f
+   repos: 502
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: yes / no
+   steps: pass, pass, pass
+   failures: none
+
+4. bc-a8219e8d-8b90-4685-b81b-72229f1753be
+   URL: https://cursor.com/agents/bc-a8219e8d-8b90-4685-b81b-72229f1753be
+   run: run-06802e88-c85d-4f15-bebc-b5d649382eb2
+   repos: 1000
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: no / no
+   steps: pass, pass, pass
+   failures: none
+
+5. bc-cae1d8ed-fc5a-462d-a9b2-addcb316fd84
+   URL: https://cursor.com/agents/bc-cae1d8ed-fc5a-462d-a9b2-addcb316fd84
+   run: run-f1b64579-6581-41b4-9f5e-f2df357eda64
+   repos: 502
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: yes / no
+   steps: pass, pass, pass
+   failures: none
+
+6. bc-538c8d1a-d3ce-4c9a-a98c-e9b2f11a0723
+   URL: https://cursor.com/agents/bc-538c8d1a-d3ce-4c9a-a98c-e9b2f11a0723
+   run: run-a271f97b-fb5c-45af-84cd-d39efdef4c7a
+   repos: 1000
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: no / no
+   steps: pass, pass, pass
+   failures: none
+   Note: no separate line beginning "FIRST CHECK:". The final report still records the socket present at 0 minutes and no restart.
+
+7. bc-1a87c6f7-423c-4036-82bb-dca7f22946b4
+   URL: https://cursor.com/agents/bc-1a87c6f7-423c-4036-82bb-dca7f22946b4
+   run: run-15296179-e8e7-4f8f-9a74-95174255df83
+   repos: 502
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: yes / no
+   steps: pass, pass, pass
+   failures: none
+
+8. bc-751cbcaa-3f12-417e-9599-7680752666f9
+   URL: https://cursor.com/agents/bc-751cbcaa-3f12-417e-9599-7680752666f9
+   run: run-a09d5702-e45f-4f21-b3e6-0c644a3c986c
+   repos: 1000
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: no / no
+   steps: pass, pass, pass
+   failures: none
+
+9. bc-87227c26-f7ab-4282-94f2-2249311ebd03
+   URL: https://cursor.com/agents/bc-87227c26-f7ab-4282-94f2-2249311ebd03
+   run: run-22f53112-5ab2-42a4-b673-89ede76b5795
+   repos: 502
+   status: FINISHED
+   error: null
+   forwarder at first check: on
+   minutes until it appeared: 0
+   restart before / during: yes / no
+   steps: pass, pass, pass
+   failures: none
+   Note: no separate line beginning "FIRST CHECK:". The final report still records the socket present at 0 minutes and a restart before the test.
+
+10. bc-b1bf1621-a3b2-49ac-a472-9cdaf2eaabdb
+    URL: https://cursor.com/agents/bc-b1bf1621-a3b2-49ac-a472-9cdaf2eaabdb
+    run: run-507a205c-7cb0-435f-a693-190a1e4c2383
+    repos: 1000
+    status: FINISHED
+    error: null
+    forwarder at first check: on
+    minutes until it appeared: 0
+    restart before / during: no / no
+    steps: pass, pass, pass
+    failures: none
+
+Totals
+======
+
+502 repos:
+  started 5, refused 0, failed 0
+  forwarder on at first check 5, on later 0, never on 0
+  restarted before the test 5, restarted during the test 0
+  step 1 pass 5, step 2 pass 5, step 3 pass 5
+  exec-daemon sha 3d7301c4e8429305a51f642dafaa87f1368d07cf
+  uptime at first check about 33-38 seconds (restarted just before the test)
+  tokens: 77e198c3 host-wide 500, 245234a2 2
+
+1000 repos:
+  started 5, refused 0, failed 0
+  forwarder on at first check 5, on later 0, never on 0
+  restarted before the test 0, restarted during the test 0
+  step 1 pass 5, step 2 pass 5, step 3 pass 5
+  exec-daemon sha c87ee615375d10364f4c02888fb18e55b4a37447
+  uptime at first check about 218-225 seconds
+  tokens: 17cfd609 500, 77e198c3 host-wide 500
+
+Verbatim result: 1. bc-49cab3c8-79e8-439f-8b59-98f899a5967b
+Repo count 502 matches the environment.
+================================================================
+
+FIRST CHECK: forwarder on, exec-daemon 306 up 38s, restarted before the test: yes
+
+## Step 4 report
+
+- **Step 1 variables:** `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset.
+- **exec-daemon:** PID 306, 38s at the first check and 242s at the end. Same PID, so it did not restart during the test. It had restarted before the test (under 2 minutes old at the first check). SHA `3d7301c4e8429305a51f642dafaa87f1368d07cf`. Counts: forwarder string 1, `--gh-api-forwarder-on-demand` 1, sandbox flags 0.
+- **Socket:** `/home/ubuntu/.cursor-gh-api-forwarder/c26377432c31bce721d5d8ba914021e1.sock`, present at the first check (0 minutes), directory mode `700`, 1 daemon record, connect succeeded. The same path was still set after Step 3.
+
+**Steps:** Step 1 pass. Step 2 pass. Step 3 pass.
+
+- **Repos and tokens:** 502 repos, 2 tokens, 0 skipped, 0 mapped to `none`. `77e198c3` 500 repos (host-wide), `245234a2` 2 repos. gh's stored login token name is `77e198c3`.
+- **Controls** (`/collaborators`): `rktyp/test_repo_0501` own `245234a2` 200, other `77e198c3` 404. `rktyp/test_repo_0001` own `77e198c3` 200, other `245234a2` 404. Label check was not run: both own-token calls were 200 and both other-token calls were 404.
+- **Step 3 gh:** the collaborators loop over all 502 repos printed nothing. On both control repos, `repo view`, `pr list`, `issue list`, and `run list` exited 0 (lists empty).
+- **Failures:** none.
+
+Verbatim result: 2. bc-15dfc33d-8421-46b5-95a2-33bf99657f55
+Repo count 1000 matches the environment.
+================================================================
+
+## Step 4 report
+
+- **Step 1 environment:** `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset.
+- **exec-daemon:** PID 321 at the first check (225s) and at the end (627s). It did not restart before the test or during it. SHA `c87ee615375d10364f4c02888fb18e55b4a37447`. Counts: forwarder string 1, `--gh-api-forwarder-on-demand` 1, sandbox flags 0.
+- **Socket:** `/home/ubuntu/.cursor-gh-api-forwarder/63d33a04efbf4e8c366613672427f256.sock`, present at the first check (0 minutes), directory mode `700`, 1 daemon record. The same path was still configured after Step 3. Connect succeeded.
+
+- **Step 1:** pass.
+- **Step 2:** pass.
+- **Step 3:** pass. The collaborators loop printed nothing. Label create/delete was not required: every token’s control repo got 404 for the other token. `repo view`, `pr list`, `issue list`, and `run list` on both control repos exited 0.
+
+- **Repos:** 1000. **Tokens:** 2. `17cfd609` 500 repos. `77e198c3` 500 repos (host-wide). Repos mapped to `none`: 0. **gh login token:** `77e198c3`.
+- **Controls:** `rktyp/test_repo_0501` own `17cfd609` 200, other `77e198c3` 404. `rktyp/test_repo_0001` own `77e198c3` 200, other `17cfd609` 404. No label status codes.
+- **Failures:** none.
+
+Verbatim result: 3. bc-f4546f82-f21f-4e34-85f7-cb503195bb81
+Repo count 502 matches the environment.
+================================================================
+
+FIRST CHECK: forwarder on, exec-daemon 295 up 35s, restarted before the test: yes
+
+## Step 4 report
+
+- **Step 1 environment:** `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset.
+- **exec-daemon:** PID 295, 35s at the first check and 341s at the end. It had restarted before the test. It did not restart during the test (same PID). SHA `3d7301c4e8429305a51f642dafaa87f1368d07cf`. Counts: forwarder string 1, `--gh-api-forwarder-on-demand` 1, sandbox flags 0.
+- **Socket:** `/home/ubuntu/.cursor-gh-api-forwarder/4675e83e838e30c33625987502356b4b.sock` was already present at the first check (0 minutes). Directory mode `700`, daemon record count 1. The socket line was still there after Step 3. Connect succeeded.
+- **Step 1:** pass. **Step 2:** pass. **Step 3:** pass. The collaborators loop printed nothing. Every `repo view`, `pr list`, `issue list`, and `run list` on both control repos exited 0. Both tokens have a control repo whose other token got 404. The label commands were not required.
+- **Repos and tokens:** 502 repos, 2 tokens. `77e198c3` (host-wide): 500 repos. `245234a2`: 2 repos (`rktyp/test_repo_0501`, `rktyp/test_repo_0502`). None mapped to `none`. gh’s stored login token is `77e198c3`.
+- **Controls:** `rktyp/test_repo_0001` own `77e198c3` 200, other `245234a2` 404. `rktyp/test_repo_0501` own `245234a2` 200, other `77e198c3` 404. No label status codes.
+- **Failures:** none.
+
+Verbatim result: 4. bc-a8219e8d-8b90-4685-b81b-72229f1753be
+Repo count 1000 matches the environment.
+================================================================
+
+Step 1 variables set: none. `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset. exec-daemon PID 319 was up 219s at the first check and 635s at the end. It did not restart before or during the test. exec-daemon sha `c87ee615375d10364f4c02888fb18e55b4a37447`. Counts: 1, 1, 0. Socket `/home/ubuntu/.cursor-gh-api-forwarder/f6fd5b9ad4966f279eaa94c62120629e.sock` was present at the first check (0 minutes), directory mode `700`, 1 daemon record. The socket was still set after Step 3, and a Unix connect to it succeeded.
+
+- Step 1: pass
+- Step 2: pass
+- Step 3: pass. The collaborators loop printed nothing. Own-token controls were both 200 and other-token controls were both 404, so the label create/delete was not required. `repo view`, `pr list`, `issue list`, and `run list` exited 0 on both control repos.
+
+Repos: 1000. Tokens: 2. Repos per token: `17cfd609` 500, `77e198c3` 500 (host-wide). gh login token: `77e198c3`. Controls: `rktyp/test_repo_0501` own `17cfd609` 200, other `77e198c3` 404; `rktyp/test_repo_0001` own `77e198c3` 200, other `17cfd609` 404. No label status codes. No failing repos or commands.
+
+Verbatim result: 5. bc-cae1d8ed-fc5a-462d-a9b2-addcb316fd84
+Repo count 502 matches the environment.
+================================================================
+
+**Step 1.** `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset. exec-daemon PID 314 was up 33s at the first check and 298s at the end. It restarted before the test and did not restart during it. exec-daemon sha `3d7301c4e8429305a51f642dafaa87f1368d07cf`. Counts: forwarder 1, on-demand flag 1, sandbox flags 0. Socket `/home/ubuntu/.cursor-gh-api-forwarder/4c160e59b3f4d0f95dba696977c38f20.sock` was present at the first check (0 minutes), directory mode 700, 1 daemon record. The socket was still there after Step 3, and a Unix connect succeeded.
+
+**Step 2: pass. Step 3: pass.** The collaborator sweep printed nothing. Both control repos returned 200 for their own token and 404 for the other token, so the label check was not run. `repo view`, `pr list`, `issue list`, and `run list` all exited 0 on both control repos.
+
+**Counts.** 502 repos, 2 tokens, 0 mapped to `none`. `77e198c3` is host-wide and covers 500 repos. `245234a2` covers 2 repos. gh's stored login is `77e198c3`. Controls: `rktyp/test_repo_0501` own `245234a2` 200, other `77e198c3` 404. `rktyp/test_repo_0001` own `77e198c3` 200, other `245234a2` 404. No label status codes. No failing repos or commands.
+
+Verbatim result: 6. bc-538c8d1a-d3ce-4c9a-a98c-e9b2f11a0723
+Repo count 1000 matches the environment.
+================================================================
+
+Step 1 passed. All five variables were unset. The exec-daemon is PID 294, up 218s at the first check and 665s at the end. It did not restart before or during the test. Its sha is `c87ee615375d10364f4c02888fb18e55b4a37447`, and the three counts are 1, 1, and 0. The socket `/home/ubuntu/.cursor-gh-api-forwarder/78917574f44aabd052b1ea721bb92240.sock` was already present (0 minutes), the directory mode is 700, there is 1 record, and the socket was still there after Step 3.
+
+Step 2 passed. 1000 repos, 2 tokens: `17cfd609` has 500 and `77e198c3` (host-wide) has 500. None mapped to `none`. gh’s login token is `77e198c3`.
+- `rktyp/test_repo_0501`: own `17cfd609` 200, other `77e198c3` 404
+- `rktyp/test_repo_0001`: own `77e198c3` 200, other `17cfd609` 404
+
+Step 3 passed. The collaborators loop printed nothing across all 1000 repos. No label call was required, because every other-token collaborators call was 404. `repo view`, `pr list`, `issue list`, and `run list` each exited 0 on both control repos. No failing repo or command.
+
+Verbatim result: 7. bc-1a87c6f7-423c-4036-82bb-dca7f22946b4
+Repo count 502 matches the environment.
+================================================================
+
+FIRST CHECK: forwarder on, exec-daemon 314 up 37s, restarted before the test: yes
+
+## Step 4 report
+
+- **Step 1 variables:** `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset.
+- **exec-daemon:** PID 314 at the first check (37s) and at the end (263s). It restarted before the test (under 2 minutes at the first check) and did not restart during the test. SHA `3d7301c4e8429305a51f642dafaa87f1368d07cf`. Counts: 1, 1, 0.
+- **Socket:** `/home/ubuntu/.cursor-gh-api-forwarder/b5b6810e4e28f03f9d6cb7cc3f183864.sock`, present at the first check (0 minutes), connect succeeded. Directory mode `700`, daemon records `1`. The same path was still set after Step 3.
+- **Steps:** Step 1 pass. Step 2 pass. Step 3 pass. The collaborators loop printed nothing. Every everyday `gh` command exited 0. Both tokens had a control repo whose other-token collaborators call returned 404, so the label check was not run.
+- **Repos and tokens:** 502 repos, 2 tokens. `245234a2`: 2 repos. `77e198c3` (host-wide): 500 repos. None mapped to `none`. gh's stored login token name: `77e198c3`.
+- **Control statuses:**
+ - `rktyp/test_repo_0501`: own `245234a2` 200, other `77e198c3` 404
+ - `rktyp/test_repo_0001`: own `77e198c3` 200, other `245234a2` 404
+- **Everyday commands (all exit 0):** `repo view`, `pr list`, `issue list`, and `run list` on both control repos. Lists were empty.
+- **Failures:** none.
+
+Verbatim result: 8. bc-751cbcaa-3f12-417e-9599-7680752666f9
+Repo count 1000 matches the environment.
+================================================================
+
+**Step 1.** None of `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, or `XDG_CONFIG_HOME` were set. exec-daemon PID 337 was up 222s at the first check and 609s at the end. It did not restart before the test (already past 2 minutes) or during it (same PID). sha `c87ee615375d10364f4c02888fb18e55b4a37447`. Counts: 1, 1, 0. Socket `/home/ubuntu/.cursor-gh-api-forwarder/cdb1da3b89642516876c6d892ee197b3.sock` was already present (0 minutes), directory mode `700`, 1 daemon record, connect succeeded, and the same path was still configured after Step 3.
+
+**Step 2: pass. Step 3: pass.** 1000 repos, 2 tokens: `17cfd609` 500, `77e198c3` (host-wide) 500, `none` 0. gh’s stored login is `77e198c3`. Controls: `rktyp/test_repo_0001` own `77e198c3` 200, other `17cfd609` 404; `rktyp/test_repo_0501` own `17cfd609` 200, other `77e198c3` 404. No label calls. The collaborators loop printed nothing (1000/1000). On both control repos, `repo view`, `pr list`, `issue list`, and `run list` all exited 0 (empty lists).
+
+**Failures.** None.
+
+Verbatim result: 9. bc-87227c26-f7ab-4282-94f2-2249311ebd03
+Repo count 502 matches the environment.
+================================================================
+
+Step 1 variables set: none. `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were all unset.
+
+exec-daemon PID 315 was up 36s at the first check and 340s at the end. It restarted before the test and did not restart during the test. SHA `3d7301c4e8429305a51f642dafaa87f1368d07cf`. Counts: 1, 1, 0. Socket `/home/ubuntu/.cursor-gh-api-forwarder/52ff3650cd0b44974f1f53b448b33564.sock` was present at the first check (0 minutes), directory mode `700`, 1 daemon record, and the same socket line was still there after Step 3.
+
+- Step 1: pass
+- Step 2: pass
+- Step 3: pass
+
+502 repos, 2 tokens. `245234a2`: 2 repos. `77e198c3`: 500 repos (host-wide). gh's stored login token is `77e198c3`. No repos mapped to `none`.
+
+Controls:
+- `rktyp/test_repo_0501` own `245234a2` 200, other `77e198c3` 404
+- `rktyp/test_repo_0001` own `77e198c3` 200, other `245234a2` 404
+
+The label check did not apply, so there are no label status codes. The collaborators scan printed nothing. Every everyday gh command exited 0. No failing repos or commands.
+
+Verbatim result: 10. bc-b1bf1621-a3b2-49ac-a472-9cdaf2eaabdb
+Repo count 1000 matches the environment.
+================================================================
+
+Step 1 variables `GH_TOKEN`, `GITHUB_TOKEN`, `GH_HOST`, `GH_CONFIG_DIR`, and `XDG_CONFIG_HOME` were unset. exec-daemon PID 341 was up 223s at the first check and 616s at the end. It had not restarted before the test and did not restart during it. exec-daemon sha `c87ee615375d10364f4c02888fb18e55b4a37447`. Counts: 1, 1, 0. Socket `/home/ubuntu/.cursor-gh-api-forwarder/5e5e4cf27acafd160e05be82830110d2.sock` was already present (0 minutes), directory mode `700`, 1 daemon record. The socket was still set after Step 3. The unix connect exited 0.
+
+Step 1: pass. Step 2: pass. Step 3: pass.
+
+1000 repos, 2 tokens. Repos per token: `17cfd609` 500, `77e198c3` host-wide 500, `none` 0. gh login token: `77e198c3`.
+
+Controls:
+- `rktyp/test_repo_0501` own `17cfd609` 200, other `77e198c3` 404
+- `rktyp/test_repo_0001` own `77e198c3` 200, other `17cfd609` 404
+
+The label check did not run: both own-token calls were 200 and both other-token calls were 404. Step 3.1 printed nothing (1000 `gh api` calls, 0 failures). `repo view`, `pr list`, `issue list`, and `run list` on both control repos exited 0.
+
+No failing repos or commands.
